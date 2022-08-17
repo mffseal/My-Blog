@@ -1,0 +1,24 @@
+spring:
+  #数据库
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8
+    username: root
+    password: 123456
+
+  #jpa配置
+  jpa:
+    hibernate:
+      ddl-auto: none  #连接数据库时比对当前项目实体对象与数据库是否一致，不一致则更新数据库，生产环境时改为none
+    show-sql: true  #在控制台和日志输出sql语句
+
+# 配置日志
+logging:
+  level:
+    root: warn  #springboot框架本身的级别，默认info
+    com.mfj: info  #自定义包
+  file:
+    path: /log
+    name: blog-pro.log
+server:
+  port: 8081

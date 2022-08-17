@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="_fragments :: head(~{::title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>搜索结果</title>
+    <!--semantic ui CDN-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <link rel="stylesheet" href="../static/css/me.css">
+</head>
+<body>
+
+<!--导航-->
+<!--反转色 无圆角贴附-->
+<nav th:replace="_fragments :: menu(0)" class="ui inverted attached segment m-padded-tb-mini m-shadow-small">
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <!--青色 标题-->
+            <!--item代表menu的子元素-->
+            <h2 class="ui teal header item">Blog</h2>
+            <!--m-item用于jQuery定位-->
+            <a href="#" class="m-item item m-mobile-hide"><i class="home icon"></i>首页</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="idea icon"></i>分类</a>
+            <a href="#" class="active m-item item m-mobile-hide"><i class="tags icon"></i>标签</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="clone icon"></i>归档</a>
+            <a href="#" class="m-item item m-mobile-hide"><i class="info icon"></i>关于</a>
+            <!--搜索框-->
+            <div class="right item m-mobile-hide">
+                <div class="ui icon inverted transparent input">
+                    <input type="text" placeholder="Search....">
+                    <i class="search link icon"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--指定绝对位置布局
+    menu toggle用于jQuery获取元素，无实际意义，获取也可以用id-->
+    <a href="#" class="ui black menu toggle icon button m-right-top m-mobile-show">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!--中间内容-->
+<div class="m-container-small m-padded-tb-big">
+    <div class="ui container">
+        <!--头部-->
+        <div class="ui top attached segment">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <h3 class="ui teal header">搜索结果</h3>
+                </div>
+                <div class="right aligned column">
+                    共 <h3 class="ui orange header m-inline-block m-text-thin" th:text="${page.totalElements}"> 14 </h3>
+                    个
+                </div>
+            </div>
+        </div>
+
+        <!--文章列表-->
+        <div class="ui top attached teal segment">
+            <div class="ui padded vertical m-padded-tb-large segment" th:each="blog : ${page.content}">
+                <!--手机端列顺序反转，图片置顶-->
+                <div class="ui middle aligned mobile reversed stackable grid">
+                    <div class="eleven wide column">
+                        <div class="ui header"><a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank"
+                                                  class="m-black" th:text="${blog.title}">你真的理解什么是财富自由吗？</a></div>
+                        <p class="m-text" th:text="|${blog.description}......|">
+                            你真的理解什么是财富自由吗你真的理解什么是财富自由吗你真的理解什么是财富自由吗你真的理解什么是财富自由吗你真的理解什么是财富自由吗</p>
+                        <div class="ui grid">
+                            <div class="eleven wide column">
+                                <!--水平列表-->
+                                <div class="ui mini horizontal link list">
+                                    <div class="item">
+                                        <!--圆形图片-->
+                                        <img src="../static/images/pic2.jpg" th:src="@{${blog.user.avatar}}" alt=""
+                                             class="ui avatar image">
+                                        <!--图片描述-->
+                                        <div class="content">
+                                            <a href="#" class="header" th:text="${blog.user.nickname}">孟某某</a>
+                                        </div>
+                                    </div>
+                                    <div class="item">
+                                        <i class="calendar icon"></i><span
+                                            th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd')}">2020-03-29</span>
+                                    </div>
+                                    <div class="item">
+                                        <i class="eye icon"></i> <span th:text="${blog.views}">2342</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--文章标签-->
+                            <div class="right aligned five wide column">
+                                <a href="#" target="_blank" class="ui teal basic m-padded-tiny m-text-thin label"
+                                   th:text="${blog.type.name}">认知升级</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!--文章图片-->
+                    <div class="five wide column">
+                        <a href="#" th:href="@{/blog/{id}(id=${blog.id})}" target="_blank">
+                            <img src="../static/images/pic1.jpg" th:src="@{${blog.firstPicture}}"
+                                 class="ui rounded image"/></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!--底部内容，下依附-->
+        <div class="ui bottom attached segment" th:if="${page.totalPages} > 1">
+            <div class="ui middle aligned two column grid">
+                <div class="column">
+                    <a href="#" th:href="@{/(page=${page.number}-1)}" th:unless="${page.first}"
+                       class="ui teal basic mini button">上一页</a>
+                </div>
+                <div class="right aligned column">
+                    <a href="#" th:href="@{/(page=${page.number}+1)}" th:unless="${page.last}"
+                       class="ui teal basic mini button">下一页</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<br>
+
+<!--底部，扩大上下边距-->
+<footer th:replace="_fragments :: footer" class="ui inverted vertical segment m-padded-tb-massive">
+    <!--所有容器内容居中-->
+    <div class="ui center aligned container">
+        <!--semantic的grid竖着切16份，divided为竖分割线-->
+        <div class="ui inverted divided stackable grid">
+            <!--three代表占3份，wide代表填满-->
+            <div class="three wide column">
+                <!--图片放在list里为了向右偏移-->
+                <div class="ui inverted link list">
+                    <div class="item">
+                        <!--rounded表示圆角-->
+                        <img src="../static/images/wechat.jpg" class="ui rounded image" alt=""
+                             style="width: 110px; height: 110px">
+                    </div>
+                </div>
+            </div>
+            <div class="three wide column">
+                <!--竖向排列的列表-->
+                <h4 class="ui inverted header m-text-spaced">最新博客</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">用户故事</a>
+                    <a href="#" class="item">用户故事</a>
+                    <a href="#" class="item">用户故事</a>
+                </div>
+            </div>
+            <div class="three wide column">
+                <!--竖向排列的列表-->
+                <h4 class="ui inverted header m-text-spaced">联系我</h4>
+                <div class="ui inverted link list">
+                    <a href="#" class="item">QQ：123456789</a>
+                    <a href="#" class="item">Email：123456789@qq.com</a>
+                </div>
+            </div>
+            <div class="seven wide column">
+                <h4 class="ui inverted header m-text-spaced">GokouCat</h4>
+                <p class="m-text-thin m-text-spaced m-opacity-mini">
+                    最新博客最新博客最新博客最新博客最新博客最新博客最新博客最新博客最新博客最新博客最新博客最新博客最新博客</p>
+            </div>
+        </div>
+        <!--底部分割线-->
+        <div class="ui inverted section divider"></div>
+        <p class="m-text-thin m-text-spaced m-opacity-tiny">Copyright © 盘古开天辟地 – 2020 GokouCat</p>
+    </div>
+</footer>
+
+<!--/*/<th:block th:replace="_fragments :: script">/*/-->
+<!--jquery CDN-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--semantic ui CDN-->
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+
+
+<script>
+    // 手机端右上角菜单键
+    $('.menu.toggle').click(function () {
+        $('.m-item').toggleClass('m-mobile-hide'); //toggleClass：jquery方法，开关样式
+    });
+</script>
+
+</body>
+</html>

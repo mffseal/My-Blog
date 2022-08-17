@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="admin/_fragments :: head(~{:: title})">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客管理登录</title>
+    <!--semantic ui CDN-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
+
+    <link rel="stylesheet" href="../../static/css/me.css">
+</head>
+<body>
+
+<br>
+<br>
+<br>
+
+<!--登录框-->
+<div class="m-container-small m-padded-tb-massive" style="max-width: 30em !important;">
+    <div class="ui container">
+        <div class="ui middle aligned center aligned grid">
+            <div class="column">
+                <h2 class="ui teal image header">
+                    <div class="content">
+                        管理后台登录
+                    </div>
+                </h2>
+                <!--设置用户名和密码需要提交到哪个页面-->
+                <form class="ui large form" method="post" action="#" th:action="@{/admin/login}">
+                    <div class="ui segment">
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="user icon"></i>
+                                <input type="text" name="username" placeholder="用户名">
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui left icon input">
+                                <i class="lock icon"></i>
+                                <input type="password" name="password" placeholder="密码">
+                            </div>
+                        </div>
+                        <button class="ui fluid large teal submit button">登 录</button>
+                    </div>
+
+                    <!--前端评断输入是否为空的提示-->
+                    <div class="ui error mini message"></div>
+                    <!--后端验证数据的提示，要用negative而不是error，unless:消息有值时才显示-->
+                    <div class="ui negative mini message" th:unless="${#strings.isEmpty(message)}" th:text="${message}">
+                        1
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--/*/<th:block th:replace="admin/_fragments :: script">/*/-->
+<!--jquery CDN-->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2/dist/jquery.min.js"></script>
+<!--semantic ui CDN-->
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
+<!--/*/</th:block>/*/-->
+
+<script>
+    // 表单验证jss
+    $('.ui.form').form({
+        fields: {
+            username: {
+                identifier: 'username',  //标识name值，要与表单里的name值一致
+                rules: [{  //可接受多个值
+                    type: 'empty',  //非空验证
+                    prompt: '请输入用户名'  //提示内容
+                }]
+            },
+            password: {
+                identifier: 'password',  //标识name值，要与表单里的name值一致
+                rules: [{  //可接受多个值
+                    type: 'empty',  //非空验证
+                    prompt: '请输入密码'  //提示内容
+                }]
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
